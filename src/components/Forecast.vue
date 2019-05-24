@@ -1,8 +1,9 @@
 <template>
   <div>
     <h1>{{ currentTemp }}</h1>
-    <div v-for="forecast in dailyForecasts" :key="forecast.name">
-      <p style="margin: 0px">{{ forecast.name }} : {{ forecast.temperature }}</p>
+    <p>{{ detailedForecast }}</p>
+    <div style="display: inline-block; margin: 5px; width: 100px" v-for="forecast in dailyForecasts" :key="forecast.name">
+      <p style="margin: 0px">{{ forecast.name }}<br />{{ forecast.temperature }}</p>
       <img height="50" width="50" :src="forecast.icon" style="border-radius: 5px" />
     </div>
   </div>
@@ -21,6 +22,7 @@ export default {
   data() {
     return {
       currentTemp: 0,
+      detailedForecast: "",
       dailyForecasts: []
     };
   },
@@ -35,10 +37,12 @@ export default {
     }, 3600000);
     axios.get(forecastURL).then(response => {
       this.dailyForecasts = response.data.properties.periods;
+      this.detailedForecast = response.data.properties.periods[0].detailedForecast;
     });
     setInterval(() => {
       axios.get(forecastURL).then(response => {
         this.dailyForecasts = response.data.properties.periods;
+        this.detailedForecast = response.data.properties.periods[0].detailedForecast;
       });
     }, 1200000);
   }
