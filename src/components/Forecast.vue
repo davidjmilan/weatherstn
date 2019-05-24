@@ -2,8 +2,8 @@
   <div>
     <h1>{{ currentTemp }}</h1>
     <div v-for="forecast in dailyForecasts" :key="forecast.name">
-      <p>{{ forecast.name }} : {{ forecast.temperature }}</p>
-      <img :src="forecast.icon" style="border-radius: 5px" />
+      <p style="margin: 0px">{{ forecast.name }} : {{ forecast.temperature }}</p>
+      <img height="50" width="50" :src="forecast.icon" style="border-radius: 5px" />
     </div>
   </div>
 </template>
@@ -17,7 +17,7 @@ const forecastHourlyURL =
   "https://api.weather.gov/gridpoints/BOX/66,74/forecast/hourly";
 
 export default {
-  name: "HelloWorld",
+  name: "Forecast",
   data() {
     return {
       currentTemp: 0,
