@@ -2,10 +2,18 @@
   <div>
     <header>
       <h1>{{ detailedForecast }}</h1>
-      <p width="400" style="fontSize: 100px; margin:10px">
-        {{ currentData.low }} / {{ currentData.high }}
+      <p
+        style="font-size: 100px; margin-top: 10px; margin-bottom: 10px; margin-left: 100px"
+      >
+        {{ currentData.current }}
       </p>
       <i class="wi" :class="currentData.icon" />
+      <p
+        width="400"
+        style="font-size: 30px; margin-top:5px; margin-bottom: 5px; margin-left: 100px"
+      >
+        {{ currentData.low }} / {{ currentData.high }}
+      </p>
     </header>
     <div
       style="display: inline-block; margin: 5px; width: 100px"
@@ -37,8 +45,9 @@ export default {
     return {
       currentData: {
         high: 0,
-        icon: "",
-        low: 0
+        low: 0,
+        current: 0,
+        icon: ""
       },
       detailedForecast: "",
       dailyForecasts: [],
@@ -57,7 +66,8 @@ export default {
   },
   methods: {
     processHourly(response) {
-      this.currentData.high = response.data.properties.periods[0].temperature;
+      this.currentData.current =
+        response.data.properties.periods[0].temperature;
       this.currentData.icon = this.convertIcon(
         response.data.properties.periods[0].icon
       );
@@ -66,9 +76,13 @@ export default {
       this.currentData.low = response.data.properties.periods[0].isDaytime
         ? response.data.properties.periods[1].temperature
         : response.data.properties.periods[0].temperature;
+      this.currentData.high = response.data.properties.periods[0].isDaytime
+        ? response.data.properties.periods[0].temperature
+        : "-";
       this.dailyForecasts = _.chain(response.data.properties.periods)
         .dropWhile(item => item.number === 1 || item.name === "Tonight")
         .chunk(2)
+        .filter(item => item.length === 2)
         .map(item => _.set(item[0], "low", item[1].temperature))
         .map(item => _.set(item, "icon", this.convertIcon(item.icon)))
         .value();
