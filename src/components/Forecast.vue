@@ -1,32 +1,34 @@
 <template>
   <div>
     <header>
-      <h1>{{ detailedForecast }}</h1>
+      <h1 style="margin:10px; font-size:20px; height:144px; overflow: scroll;">{{ detailedForecast }}</h1>
       <p
-        style="font-size: 100px; margin-top: 10px; margin-bottom: 10px; margin-left: 100px"
+        style="font-size: 80px; margin-top: 10px; margin-bottom: 10px; margin-left: 100px"
       >
         {{ currentData.current }}
+        <i style="vertical-align: top" class="wi" :class="currentData.icon" />
       </p>
-      <i class="wi" :class="currentData.icon" />
       <p
         width="400"
         style="font-size: 30px; margin-top:5px; margin-bottom: 5px; margin-left: 100px"
       >
-        {{ currentData.low }} / {{ currentData.high }}
+        {{ currentData.high }} / {{ currentData.low }}
       </p>
     </header>
-    <div
-      style="display: inline-block; margin: 5px; width: 100px"
-      v-for="forecast in dailyForecasts"
-      :key="forecast.name"
-    >
-      <p style="margin: 0px">
-        {{ forecast.name }}
-        <br />
-        {{ forecast.low }}/{{ forecast.temperature }}
-      </p>
-      <i class="wi" :class="forecast.icon" />
-    </div>
+    <footer>
+      <div
+        style="display: inline-block; margin: 5px; width: 115px"
+        v-for="forecast in dailyForecasts"
+        :key="forecast.name"
+      >
+        <p style="margin: 0px">
+          {{ forecast.name }}
+          <br />
+          {{ forecast.temperature }} / {{ forecast.low }}
+        </p>
+        <i class="wi" :class="forecast.icon" />
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -144,8 +146,18 @@ export default {
 </script>
 
 <style scoped>
+header {
+  width: 400px;
+}
 i {
-  color: grey;
+  color: #0077c2;
   font-size: 50px;
+  margin: 10px;
+}
+footer {
+  position: absolute;
+  text-align: center;
+  bottom: 0px;
+  margin-left: 15px;
 }
 </style>

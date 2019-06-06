@@ -1,17 +1,36 @@
 <template>
   <div id="app">
-    <forecast />
+    <div id="forecast">
+      <forecast />
+    </div>
+    <div id="radar">
+      <radar />
+    </div>
   </div>
 </template>
 
 <script>
 import Forecast from "./components/Forecast.vue";
+import Radar from "./components/Radar.vue";
 import "./assets/css/weathericons.min.css";
 
 export default {
   name: "app",
   components: {
-    Forecast
+    Forecast,
+    Radar
   }
 };
 </script>
+
+<style>
+#forecast {
+  display: inline-block;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  color: #29434e;
+}
+
+#radar {
+  display: inline-block;
+}
+</style>
