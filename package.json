@@ -12,8 +12,7 @@
     "core-js": "^2.6.5",
     "jquery": "^3.4.1",
     "lodash": "^4.17.11",
-    "vue": "^2.6.10",
-    "vue-keyframes": "^1.0.1"
+    "vue": "^2.6.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.6.0",
