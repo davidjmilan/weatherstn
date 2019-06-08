@@ -12,7 +12,7 @@ import _ from "lodash";
 import { setInterval } from "timers";
 
 const radarURL = "https://radar.weather.gov/ridge/RadarImg/N0R/BOX/";
-const proxyURL = "https://cors.io/?";
+const proxyURL = "http://localhost:8080/post?q=";
 
 export default {
   name: "Radar",
@@ -36,7 +36,8 @@ export default {
       this.frames = _.chain($("a", $(result.data)).toArray())
         .filter(item => item.href.includes("N0R.gif"))
         .map(item => radarURL + item.innerText)
-        .value();
+        .value()
+        .slice(10);
     }
   },
   computed: {
