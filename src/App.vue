@@ -33,4 +33,8 @@ export default {
 #radar {
   display: inline-block;
 }
+
+#app {
+  cursor: none;
+}
 </style>

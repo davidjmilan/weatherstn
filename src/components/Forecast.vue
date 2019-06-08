@@ -1,7 +1,7 @@
 <template>
   <div>
     <header>
-      <h1 style="margin:10px; font-size:20px; height:144px; overflow: scroll;">{{ detailedForecast }}</h1>
+      <h1 style="margin:10px; font-size:20px; height:144px; overflow: hidden;">{{ detailedForecast }}</h1>
       <p
         style="font-size: 80px; margin-top: 10px; margin-bottom: 10px; margin-left: 100px"
       >
