@@ -12,7 +12,6 @@
 <script>
 import Forecast from "./components/Forecast.vue";
 import Radar from "./components/Radar.vue";
-import "./assets/css/weathericons.min.css";
 
 export default {
   name: "app",
