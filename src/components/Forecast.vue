@@ -28,7 +28,7 @@
           <br />
           {{ forecast.temperature }} / {{ forecast.low }}
         </p>
-        <font-awesome-icon :icon="forecast.icon" />
+        <font-awesome-icon class="icon" :icon="forecast.icon" />
       </div>
     </footer>
   </div>
@@ -169,9 +169,8 @@ export default {
 header {
   width: 400px;
 }
-i {
-  color: #0077c2;
-  font-size: 50px;
+.icon {
+  font-size: 40px;
   margin: 10px;
 }
 footer {
