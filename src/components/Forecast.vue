@@ -1,12 +1,14 @@
 <template>
   <div>
     <header>
-      <h1 style="margin:10px; font-size:20px; height:144px; overflow: hidden;">{{ detailedForecast }}</h1>
+      <h1 style="margin:10px; font-size:20px; height:144px; overflow: hidden;">
+        {{ detailedForecast }}
+      </h1>
       <p
         style="font-size: 80px; margin-top: 10px; margin-bottom: 10px; margin-left: 100px"
       >
         {{ currentData.current }}
-        <i style="vertical-align: top" class="wi" :class="currentData.icon" />
+        <font-awesome-icon :icon="currentData.icon" />
       </p>
       <p
         width="400"
@@ -26,7 +28,7 @@
           <br />
           {{ forecast.temperature }} / {{ forecast.low }}
         </p>
-        <i class="wi" :class="forecast.icon" />
+        <font-awesome-icon class="icon" :icon="forecast.icon" />
       </div>
     </footer>
   </div>
@@ -36,6 +38,29 @@
 import axios from "axios";
 import _ from "lodash";
 import { setInterval } from "timers";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faBolt,
+  faCloudMeatball,
+  faSun,
+  faCloud,
+  faSnowflake,
+  faCloudShowersHeavy,
+  faSmog,
+  faQuestion
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(
+  faBolt,
+  faCloudMeatball,
+  faSun,
+  faCloud,
+  faSnowflake,
+  faCloudShowersHeavy,
+  faSmog,
+  faQuestion
+);
 
 const forecastURL = "https://api.weather.gov/gridpoints/BOX/66,74/forecast";
 const forecastHourlyURL =
@@ -43,13 +68,16 @@ const forecastHourlyURL =
 
 export default {
   name: "Forecast",
+  components: {
+    "font-awesome-icon": FontAwesomeIcon
+  },
   data() {
     return {
       currentData: {
         high: 0,
         low: 0,
         current: 0,
-        icon: ""
+        icon: "question"
       },
       detailedForecast: "",
       dailyForecasts: [],
@@ -93,14 +121,14 @@ export default {
     },
     convertIcon(icon) {
       if (icon.includes("tsra")) {
-        return "wi-thunderstorm";
+        return "bolt";
       }
       if (
         icon.includes("sleet") ||
         icon.includes("fzra") ||
         icon.includes("rain_snow")
       ) {
-        return "wi-rain-mix";
+        return "cloud-meatball";
       }
       if (
         icon.includes("skc") ||
@@ -108,38 +136,30 @@ export default {
         icon.includes("hot") ||
         icon.includes("cold")
       ) {
-        return "wi-day-sunny";
+        return "sun";
       }
       if (
         icon.includes("sct") ||
         icon.includes("bkn") ||
         icon.includes("ovc")
       ) {
-        return "wi-cloudy";
+        return "cloud";
       }
       if (icon.includes("snow") || icon.includes("blizzard")) {
-        return "wi-snow";
+        return "snowflake";
       }
       if (icon.includes("rain")) {
-        return "wi-rain";
-      }
-      if (icon.includes("hurricane") || icon.includes("tropical_storm")) {
-        return "wi-hurricane";
+        return "cloud-showers-heavy";
       }
       if (
         icon.includes("haze") ||
         icon.includes("smoke") ||
-        icon.includes("dust")
+        icon.includes("dust") ||
+        icon.includes("fog")
       ) {
-        return "wi-smog";
+        return "smog";
       }
-      if (icon.includes("fog")) {
-        return "wi-fog";
-      }
-      if (icon.includes("tornado")) {
-        return "wi-tornado";
-      }
-      return "wi-na";
+      return "question";
     }
   }
 };
@@ -149,9 +169,8 @@ export default {
 header {
   width: 400px;
 }
-i {
-  color: #0077c2;
-  font-size: 50px;
+.icon {
+  font-size: 40px;
   margin: 10px;
 }
 footer {
