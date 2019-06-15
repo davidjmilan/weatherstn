@@ -1,7 +1,13 @@
 <template>
   <div>
     <img src="../assets/radarBackground.jpg" />
-    <img :src="currentFrame" id="animate" />
+    <img
+      v-for="frame in frames"
+      :src="frame"
+      class="animate"
+      ref="animate"
+      :key="frame"
+    />
   </div>
 </template>
 
@@ -9,7 +15,6 @@
 import axios from "axios";
 import $ from "jquery";
 import _ from "lodash";
-import { setInterval } from "timers";
 
 const radarURL = "https://radar.weather.gov/ridge/RadarImg/N0R/BOX/";
 const proxyURL = "http://localhost:8080/post?q=";
@@ -28,7 +33,9 @@ export default {
       axios.get(proxyURL + radarURL).then(this.processFileListing);
     }, 300000);
     setInterval(() => {
+      this.$refs["animate"][this.step].style.display = "none";
       this.step = this.step === this.frames.length - 1 ? 0 : this.step + 1;
+      this.$refs["animate"][this.step].style.display = "initial";
     }, 75);
   },
   methods: {
@@ -38,11 +45,6 @@ export default {
         .map(item => radarURL + item.innerText)
         .value()
         .slice(10);
-    }
-  },
-  computed: {
-    currentFrame() {
-      return this.frames[this.step];
     }
   }
 };
@@ -58,7 +60,7 @@ div {
 img {
   width: 380px;
 }
-#animate {
+.animate {
   position: absolute;
   z-index: 1;
   bottom: 0;
