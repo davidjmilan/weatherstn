@@ -2,10 +2,10 @@
   <div>
     <img src="../assets/radarBackground.jpg" />
     <img
-      v-for="frame in frames"
+      v-for="(frame, i) in frames"
       :src="frame"
       class="animate"
-      ref="animate"
+      :ref="`animate__${i}`"
       :key="frame"
     />
   </div>
@@ -33,9 +33,9 @@ export default {
       axios.get(proxyURL + radarURL).then(this.processFileListing);
     }, 300000);
     setInterval(() => {
-      this.$refs["animate"][this.step].style.display = "none";
+      this.$refs[`animate__${this.step}`][0].style.display = "none";
       this.step = this.step === this.frames.length - 1 ? 0 : this.step + 1;
-      this.$refs["animate"][this.step].style.display = "initial";
+      this.$refs[`animate__${this.step}`][0].style.display = "initial";
     }, 75);
   },
   methods: {
@@ -44,7 +44,15 @@ export default {
         .filter(item => item.href.includes("N0R.gif"))
         .map(item => radarURL + item.innerText)
         .value()
-        .slice(10);
+        .slice(15);
+      this.frames.forEach(src => {
+        axios.get(proxyURL + src).catch(() => {
+          this.deleteFrame(this.frames.indexOf(src));
+        })
+      });
+    },
+    deleteFrame(index) {
+      this.frames.splice(index);
     }
   }
 };
