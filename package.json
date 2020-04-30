@@ -14,7 +14,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "axios": "^0.18.1",
     "core-js": "^2.6.9",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "lodash": "^4.17.11",
     "vue": "^2.6.10"
   },
