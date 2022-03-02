@@ -48,7 +48,7 @@ export default {
       this.frames.forEach(src => {
         axios.get(proxyURL + src).catch(() => {
           this.deleteFrame(this.frames.indexOf(src));
-        })
+        });
       });
     },
     deleteFrame(index) {
