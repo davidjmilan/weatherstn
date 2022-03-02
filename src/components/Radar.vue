@@ -16,7 +16,9 @@ import axios from "axios";
 import $ from "jquery";
 import _ from "lodash";
 
+// Webpage listing all animation frames
 const radarURL = "https://mrms.ncep.noaa.gov/data/RIDGEII/L2/KBOX/BREF_RAW/";
+// Proxy url for avoiding CORS issues
 const proxyURL = "http://localhost:8080/post?q=";
 
 export default {
@@ -28,10 +30,13 @@ export default {
     };
   },
   created() {
+    // Get animation frames
     axios.get(proxyURL + radarURL).then(this.processFileListing);
+    // Update animation frames every 5 minutes
     setInterval(() => {
       axios.get(proxyURL + radarURL).then(this.processFileListing);
     }, 300000);
+    // Animate frames, every 75ms
     setInterval(() => {
       this.$refs[`animate__${this.step}`][0].style.display = "none";
       this.step = this.step === this.frames.length - 1 ? 0 : this.step + 1;
@@ -40,17 +45,22 @@ export default {
   },
   methods: {
     processFileListing(result) {
+      // Gets frame listing and puts sources into an array.
+      // Frames appear about every 7min, and around 135 are saved on the listing.
+      // Each frame takes about 0.5s to process serverside (usually only once b/c of 304 requests.)
       this.frames = _.chain($("a", $(result.data)).toArray())
-        // .filter(item => item.href.includes("N0R.gif"))
         .map(item => radarURL + item.innerText)
         .value()
-        .slice(15);
+        .splice(-10); // How many frames to display. Negative value takes from end of array.
+
+      // Old code to check if frame is a valid image. Probably not required anymore.
       // this.frames.forEach(src => {
       //   axios.get(proxyURL + src).catch(() => {
       //     this.deleteFrame(this.frames.indexOf(src));
       //   });
       // });
     },
+    // Old code to delete invalid frames
     deleteFrame(index) {
       this.frames.splice(index);
     }

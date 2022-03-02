@@ -6,10 +6,11 @@ const chalk = require("chalk");
 const zlib = require("zlib");
 const sharp = require("sharp");
 
-
+// Set env variable $PORT to change default express port.
 let port = process.env.PORT || 8080;
 
 const app = express();
+// Logging
 app.use(morgan((tokens, req, res) => {
   let status = tokens.status(req, res);
   switch(Math.trunc(status / 100)) {
@@ -36,6 +37,7 @@ app.use(cors());
 
 app.use(express.static("public"));
 
+// Proxy for avoiding CORS issues
 app.get("/post", (req, res) => {
   request({
     uri: req.query.q,
@@ -47,19 +49,20 @@ app.get("/post", (req, res) => {
   });
 });
 
+// Image download proxy. Ungzips images and converts to PNG
 app.get("/image", (req, res) => {
   const gunzip = zlib.createGunzip();
   const topng = sharp().png();
-  res.set({"Content-Type":"image/png"});
+  res.set({"Content-Type":"image/png"}); // Specifies that this is PNG for <img> tag to use as a source.
   request({
     uri: req.query.q,
     headers: {
       "User-Agent": req.get("User-Agent")
     }
   }).on("error", res.send)
-    .pipe(gunzip)
-    .pipe(topng)
-    .pipe(res);
+    .pipe(gunzip) // Ungzips the GeoTiffs. Very slow step, probably could be improved.
+    .pipe(topng) // Converts Tiff to PNG, as Chrome cannot render Tiffs natively
+    .pipe(res); // Sends image over network
 });
 
 // eslint-disable-next-line no-console
