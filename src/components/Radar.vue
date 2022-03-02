@@ -3,7 +3,7 @@
     <img src="../assets/radarBackground.jpg" />
     <img
       v-for="(frame, i) in frames"
-      :src="frame"
+      :src="'http://localhost:8080/image?q=' + frame"
       class="animate"
       :ref="`animate__${i}`"
       :key="frame"
@@ -16,7 +16,7 @@ import axios from "axios";
 import $ from "jquery";
 import _ from "lodash";
 
-const radarURL = "https://radar.weather.gov/ridge/RadarImg/N0R/BOX/";
+const radarURL = "https://mrms.ncep.noaa.gov/data/RIDGEII/L2/KBOX/BREF_RAW/";
 const proxyURL = "http://localhost:8080/post?q=";
 
 export default {
@@ -41,15 +41,15 @@ export default {
   methods: {
     processFileListing(result) {
       this.frames = _.chain($("a", $(result.data)).toArray())
-        .filter(item => item.href.includes("N0R.gif"))
+        // .filter(item => item.href.includes("N0R.gif"))
         .map(item => radarURL + item.innerText)
         .value()
         .slice(15);
-      this.frames.forEach(src => {
-        axios.get(proxyURL + src).catch(() => {
-          this.deleteFrame(this.frames.indexOf(src));
-        });
-      });
+      // this.frames.forEach(src => {
+      //   axios.get(proxyURL + src).catch(() => {
+      //     this.deleteFrame(this.frames.indexOf(src));
+      //   });
+      // });
     },
     deleteFrame(index) {
       this.frames.splice(index);

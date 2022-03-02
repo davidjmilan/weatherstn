@@ -3,6 +3,9 @@ const morgan = require("morgan");
 const request = require("request");
 const cors = require("cors");
 const chalk = require("chalk");
+const zlib = require("zlib");
+const sharp = require("sharp");
+
 
 let port = process.env.PORT || 8080;
 
@@ -43,5 +46,21 @@ app.get("/post", (req, res) => {
     res.send(err ? err : resp.body);
   });
 });
+
+app.get("/image", (req, res) => {
+  const gunzip = zlib.createGunzip();
+  const topng = sharp().png();
+  res.set({"Content-Type":"image/png"});
+  request({
+    uri: req.query.q,
+    headers: {
+      "User-Agent": req.get("User-Agent")
+    }
+  }).on("error", res.send)
+    .pipe(gunzip)
+    .pipe(topng)
+    .pipe(res);
+});
+
 // eslint-disable-next-line no-console
 app.listen(port, () => console.log(`App running at: http://localhost:${port}/\n`));
